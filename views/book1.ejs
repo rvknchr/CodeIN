@@ -1,0 +1,1514 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js" integrity="sha512-Z8CqofpIcnJN80feS2uccz+pXWgZzeKxDsDNMD/dJ6997/LSRY+W4NmEt9acwR+Gt9OHN0kkI1CTianCwoqcjQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+    <h1>PDFViewer</h1>
+    <br>
+    <div id="pdfViewerDiv">
+        
+    </div>
+    <script>
+        initPDFViewer=()=>{
+            pdfjsLib.getDocument('/Express.js handwritten notes (1).pdf').promise.then(pdf=>{
+                pdf.getPage(1).then(page=>{
+                    let scale=1;
+                    let viewport=page.getViewport({scale:scale});
+                    let canvas=document.createElement('canvas');
+                    let context=canvas.getContext('2d');
+                    canvas.height=viewport.height;
+                    canvas.width=viewport.width;
+                    let renderContext={
+                        canvasContext:context,
+                        viewport:viewport
+                    }
+                    page.render(renderContext).promise.then(()=>{
+                        document.getElementById('pdfViewerDiv').appendChild(canvas);
+                    })
+                }).catch(error=>{
+                    console.log(error);
+                })
+
+                pdf.getPage(2).then(page=>{
+                    let scale=1;
+                    let viewport=page.getViewport({scale:scale});
+                    let canvas=document.createElement('canvas');
+                    let context=canvas.getContext('2d');
+                    canvas.height=viewport.height;
+                    canvas.width=viewport.width;
+                    let renderContext={
+                        canvasContext:context,
+                        viewport:viewport
+                    }
+                    page.render(renderContext).promise.then(()=>{
+                        document.getElementById('pdfViewerDiv').appendChild(canvas);
+                    })
+                }).catch(error=>{
+                    console.log(error);
+                })
+            }).catch(error=>{
+                console.log(error);
+            })
+        }
+        window.onload=function(){
+            initPDFViewer()
+        }
+    </script>
+</body>
+</html> -->
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Viewer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js" integrity="sha512-Z8CqofpIcnJN80feS2uccz+pXWgZzeKxDsDNMD/dJ6997/LSRY+W4NmEt9acwR+Gt9OHN0kkI1CTianCwoqcjQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        #pdfViewerDiv {
+            width: 100%;
+            background: #fff;
+            border-radius: 10px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        #pdfHeader {
+            font-size: 24px;
+            margin: 10px 0;
+        }
+        #pageContainer {
+            width: 100%;
+            height: auto; /* Adjust according to the height of the header and footer */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .canvasContainer {
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+        }
+        canvas {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+        .page-number {
+            position: absolute;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(245, 245, 245, 0.8);
+            border-radius: 10px;
+            padding: 5px 10px;
+            font-size: 16px;
+            color: #555;
+            box-shadow: 0px 2px 4px rgba(0,0,0,0.2);
+            z-index: 15;
+        }
+        .btn {
+            position: absolute;
+            top: 50%;
+            font-size: 20px;
+            padding: 8px 12px;
+            cursor: pointer;
+            transform: translateY(-50%);
+            background: #f5f5f5;
+            border: none;
+            color: #555;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            z-index: 10;
+        }
+        .btn:hover {
+            background-color: #e1e1e1;
+        }
+        #prev {
+            left: 10px;
+        }
+        #next {
+            right: 10px;
+        }
+        .seek-bar {
+            width: 100%;
+            padding: 10px 0;
+            text-align: center;
+            position: absolute;
+            bottom: 10px;
+        }
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 80%;
+            height: 8px;
+            border-radius: 5px;
+            background: #555;
+            cursor: pointer;
+            outline: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #888;
+            cursor: pointer;
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #888;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="pdfViewerDiv">
+        <div id="pdfHeader">PDF Viewer</div>
+        <div id="pageContainer">
+            <div class="canvasContainer">
+                <canvas id="canvas1"></canvas>
+            </div>
+            <div class="canvasContainer">
+                <canvas id="canvas2"></canvas>
+            </div>
+            <div class="page-number" id="pageNumber"></div>
+            <button id="prev" class="btn">&#x25C0;</button>
+            <button id="next" class="btn">&#x25B6;</button>
+        </div>
+        <div class="seek-bar">
+            <input type="range" id="pageSlider" min="1" max="100" value="1">
+        </div>
+    </div>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min.js';
+
+        let pdfDoc = null;
+        let pageNum = 1;
+        let pageCount = 0;
+        let isRendering = false;
+
+        initPDFViewer = () => {
+            pdfjsLib.getDocument('/Express.js handwritten notes (1).pdf').promise.then(pdf => {
+                pdfDoc = pdf;
+                pageCount = pdf.numPages;
+                document.getElementById('pageSlider').max = pageCount;
+                renderPages(pageNum);
+            }).catch(error => {
+                console.log(error);
+            });
+        };
+
+        const renderPages = (num) => {
+            if (isRendering) return;
+            isRendering = true;
+            num = num % 2 === 0 ? num - 1 : num;
+            renderPage(num, document.getElementById('canvas1'));
+            renderPage(num + 1, document.getElementById('canvas2'));
+        };
+
+        const renderPage = (num, canvas) => {
+            if (num > pageCount) {
+                canvas.style.display = 'none';
+                return;
+            }
+            canvas.style.display = 'block';
+            pdfDoc.getPage(num).then(page => {
+                let viewport = page.getViewport({scale: 1});
+                let scale = (document.getElementById('pageContainer').clientWidth / 2) / viewport.width;
+                viewport = page.getViewport({scale: scale});
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+                let context = canvas.getContext('2d');
+
+                let renderContext = {
+                    canvasContext: context,
+                    viewport: viewport
+                };
+
+                page.render(renderContext).promise.then(() => {
+                    isRendering = false;
+                    document.getElementById('pageNumber').textContent = `Page ${num} of ${pageCount}`;
+                });
+            }).catch(error => {
+                console.log(error);
+                isRendering = false;
+            });
+        };
+
+        const attachButtonEvents = () => {
+            document.getElementById('next').addEventListener('click', () => {
+                if (pageNum < pageCount && !isRendering) {
+                    pageNum += 2;
+                    renderPages(pageNum);
+                }
+            });
+
+            document.getElementById('prev').addEventListener('click', () => {
+                if (pageNum > 1 && !isRendering) {
+                    pageNum -= 2;
+                    renderPages(pageNum);
+                }
+            });
+
+            const slider = document.getElementById('pageSlider');
+            slider.addEventListener('input', () => {
+                let selectedPage = parseInt(slider.value);
+                selectedPage = selectedPage % 2 === 0 ? selectedPage - 1 : selectedPage;
+                if (!isRendering && selectedPage !== pageNum) {
+                    pageNum = selectedPage;
+                    renderPages(pageNum);
+                }
+            });
+        };
+
+        window.onload = function() {
+            initPDFViewer();
+            attachButtonEvents();
+        };
+    </script>
+</body>
+</html> -->
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Viewer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js" integrity="sha512-Z8CqofpIcnJN80feS2uccz+pXWgZzeKxDsDNMD/dJ6997/LSRY+W4NmEt9acwR+Gt9OHN0kkI1CTianCwoqcjQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        #pdfViewerDiv {
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            border-radius: 10px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        #pdfHeader {
+            font-size: 24px;
+            margin: 10px 0;
+        }
+        #pageContainer {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .canvasContainer {
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        canvas {
+            border: none;
+            display: block;
+        }
+        .page-number {
+            position: absolute;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(245, 245, 245, 0.8);
+            border-radius: 10px;
+            padding: 5px 10px;
+            font-size: 16px;
+            color: #555;
+            box-shadow: 0px 2px 4px rgba(0,0,0,0.2);
+            z-index: 15;
+        }
+        .btn {
+            position: absolute;
+            top: 50%;
+            font-size: 20px;
+            padding: 8px 12px;
+            cursor: pointer;
+            transform: translateY(-50%);
+            background: #f5f5f5;
+            border: none;
+            color: #555;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            z-index: 10;
+        }
+        .btn:hover {
+            background-color: #e1e1e1;
+        }
+        #prev {
+            left: 10px;
+        }
+        #next {
+            right: 10px;
+        }
+        .seek-bar {
+            width: 100%;
+            padding: 10px 0;
+            text-align: center;
+        }
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 80%;
+            height: 8px;
+            border-radius: 5px;
+            background: #555;
+            cursor: pointer;
+            outline: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #888;
+            cursor: pointer;
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #888;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="pdfViewerDiv">
+        <div id="pdfHeader">PDF Viewer</div>
+        <div id="pageContainer">
+            <div class="canvasContainer">
+                <canvas id="canvas1"></canvas>
+            </div>
+            <div class="canvasContainer">
+                <canvas id="canvas2"></canvas>
+            </div>
+            <div class="page-number" id="pageNumber"></div>
+            <button id="prev" class="btn">&#x25C0;</button>
+            <button id="next" class="btn">&#x25B6;</button>
+        </div>
+        <div class="seek-bar">
+            <input type="range" id="pageSlider" min="1" max="100" value="1">
+        </div>
+    </div>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min.js';
+
+        let pdfDoc = null;
+        let pageNum = 1;
+        let pageCount = 0;
+        let isRendering = false;
+
+        initPDFViewer = () => {
+            pdfjsLib.getDocument('/Express.js handwritten notes (1).pdf').promise.then(pdf => {
+                pdfDoc = pdf;
+                pageCount = pdf.numPages;
+                document.getElementById('pageSlider').max = pageCount;
+                renderPages(pageNum);
+            }).catch(error => {
+                console.log(error);
+            });
+        };
+
+        const renderPages = (num) => {
+            if (isRendering) return;
+            isRendering = true;
+            num = num % 2 === 0 ? num - 1 : num;
+            renderPage(num, document.getElementById('canvas1'));
+            renderPage(num + 1, document.getElementById('canvas2'));
+            document.getElementById('pageSlider').value = num;
+        };
+
+        const renderPage = (num, canvas) => {
+            if (num > pageCount) {
+                canvas.style.display = 'none';
+                return;
+            }
+            canvas.style.display = 'block';
+            pdfDoc.getPage(num).then(page => {
+                let viewport = page.getViewport({scale: 1});
+                let containerWidth = document.getElementById('pageContainer').clientWidth;
+                let containerHeight = document.getElementById('pageContainer').clientHeight;
+                let scale = Math.min(containerWidth / 2 / viewport.width, containerHeight / viewport.height);
+                viewport = page.getViewport({scale: scale});
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+                let context = canvas.getContext('2d');
+
+                let renderContext = {
+                    canvasContext: context,
+                    viewport: viewport
+                };
+
+                page.render(renderContext).promise.then(() => {
+                    isRendering = false;
+                    document.getElementById('pageNumber').textContent = `Page ${num} of ${pageCount}`;
+                });
+            }).catch(error => {
+                console.log(error);
+                isRendering = false;
+            });
+        };
+
+        const attachButtonEvents = () => {
+            document.getElementById('next').addEventListener('click', () => {
+                if (pageNum < pageCount && !isRendering) {
+                    pageNum += 2;
+                    renderPages(pageNum);
+                }
+            });
+
+            document.getElementById('prev').addEventListener('click', () => {
+                if (pageNum > 1 && !isRendering) {
+                    pageNum -= 2;
+                    renderPages(pageNum);
+                }
+            });
+
+            const slider = document.getElementById('pageSlider');
+            slider.addEventListener('input', () => {
+                let selectedPage = parseInt(slider.value);
+                selectedPage = selectedPage % 2 === 0 ? selectedPage - 1 : selectedPage;
+                if (!isRendering && selectedPage !== pageNum) {
+                    pageNum = selectedPage;
+                    renderPages(pageNum);
+                }
+            });
+        };
+
+        const resizePageContainer = () => {
+            const pageContainer = document.getElementById('pageContainer');
+            const pdfViewerDiv = document.getElementById('pdfViewerDiv');
+            const headerHeight = document.getElementById('pdfHeader').offsetHeight;
+            const seekBarHeight = document.querySelector('.seek-bar').offsetHeight;
+            const totalHeight = headerHeight + seekBarHeight;
+            pageContainer.style.height = `calc(100vh - ${totalHeight}px)`;
+        };
+
+        window.onload = function() {
+            initPDFViewer();
+            attachButtonEvents();
+            resizePageContainer();
+            window.addEventListener('resize', resizePageContainer);
+        };
+    </script>
+</body>
+</html> -->
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Viewer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js" integrity="sha512-Z8CqofpIcnJN80feS2uccz+pXWgZzeKxDsDNMD/dJ6997/LSRY+W4NmEt9acwR+Gt9OHN0kkI1CTianCwoqcjQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        #pdfViewerDiv {
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            border-radius: 10px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        #pdfHeader {
+            font-size: 24px;
+            margin: 10px 0;
+        }
+        #pageContainer {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .canvasContainer {
+            display: inline-block;
+            position: relative;
+            width: auto;
+            height: 100%;
+            overflow: hidden;
+            vertical-align: top;
+        }
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .page-number {
+            position: absolute;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(245, 245, 245, 0.8);
+            border-radius: 10px;
+            padding: 5px 10px;
+            font-size: 16px;
+            color: #555;
+            box-shadow: 0px 2px 4px rgba(0,0,0,0.2);
+            z-index: 15;
+        }
+        .btn {
+            position: absolute;
+            top: 50%;
+            font-size: 20px;
+            padding: 8px 12px;
+            cursor: pointer;
+            transform: translateY(-50%);
+            background: #f5f5f5;
+            border: none;
+            color: #555;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            z-index: 10;
+        }
+        .btn:hover {
+            background-color: #e1e1e1;
+        }
+        #prev {
+            left: 10px;
+        }
+        #next {
+            right: 10px;
+        }
+        .seek-bar {
+            width: 100%;
+            padding: 10px 0;
+            text-align: center;
+        }
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 80%;
+            height: 8px;
+            border-radius: 5px;
+            background: #555;
+            cursor: pointer;
+            outline: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #888;
+            cursor: pointer;
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #888;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="pdfViewerDiv">
+        <div id="pdfHeader">PDF Viewer</div>
+        <div id="pageContainer">
+            <div id="canvas1Container" class="canvasContainer">
+                <canvas id="canvas1"></canvas>
+            </div>
+            <div id="canvas2Container" class="canvasContainer">
+                <canvas id="canvas2"></canvas>
+            </div>
+            <div class="page-number" id="pageNumber"></div>
+            <button id="prev" class="btn">&#x25C0;</button>
+            <button id="next" class="btn">&#x25B6;</button>
+        </div>
+        <div class="seek-bar">
+            <input type="range" id="pageSlider" min="1" max="100" value="1">
+        </div>
+    </div>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min.js';
+
+        let pdfDoc = null;
+        let pageNum = 1;
+        let pageCount = 0;
+        let isRendering = false;
+
+        initPDFViewer = () => {
+            pdfjsLib.getDocument('/Express.js handwritten notes (1).pdf').promise.then(pdf => {
+                pdfDoc = pdf;
+                pageCount = pdf.numPages;
+                document.getElementById('pageSlider').max = pageCount;
+                renderPages(pageNum);
+            }).catch(error => {
+                console.log(error);
+            });
+        };
+
+        const renderPages = (num) => {
+            if (isRendering) return;
+            isRendering = true;
+            num = num % 2 === 0 ? num - 1 : num;
+            renderPage(num, document.getElementById('canvas1'));
+            renderPage(num + 1, document.getElementById('canvas2'));
+            document.getElementById('pageSlider').value = num;
+        };
+
+        const renderPage = (num, canvas) => {
+            if (num > pageCount) {
+                canvas.style.display = 'none';
+                return;
+            }
+            canvas.style.display = 'block';
+            pdfDoc.getPage(num).then(page => {
+                let viewport = page.getViewport({scale: 1});
+                let containerWidth = document.getElementById('pageContainer').clientWidth;
+                let containerHeight = document.getElementById('pageContainer').clientHeight;
+                let scale = Math.min(containerWidth / 2 / viewport.width, containerHeight / viewport.height);
+                viewport = page.getViewport({scale: scale});
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+                let context = canvas.getContext('2d');
+
+                let renderContext = {
+                    canvasContext: context,
+                    viewport: viewport
+                };
+
+                page.render(renderContext).promise.then(() => {
+                    isRendering = false;
+                    document.getElementById('pageNumber').textContent = `Page ${num} of ${pageCount}`;
+                });
+            }).catch(error => {
+                console.log(error);
+                isRendering = false;
+            });
+        };
+
+        const attachButtonEvents = () => {
+            document.getElementById('next').addEventListener('click', () => {
+                if (pageNum < pageCount && !isRendering) {
+                    pageNum += 2;
+                    renderPages(pageNum);
+                }
+            });
+
+            document.getElementById('prev').addEventListener('click', () => {
+                if (pageNum > 1 && !isRendering) {
+                    pageNum -= 2;
+                    renderPages(pageNum);
+                }
+            });
+
+            const slider = document.getElementById('pageSlider');
+            slider.addEventListener('input', () => {
+                let selectedPage = parseInt(slider.value);
+                selectedPage = selectedPage % 2 === 0 ? selectedPage - 1 : selectedPage;
+                if (!isRendering && selectedPage !== pageNum) {
+                    pageNum = selectedPage;
+                    renderPages(pageNum);
+                }
+            });
+        };
+
+        const resizePageContainer = () => {
+            const pageContainer = document.getElementById('pageContainer');
+            const pdfViewerDiv = document.getElementById('pdfViewerDiv');
+            const headerHeight = document.getElementById('pdfHeader').offsetHeight;
+            const seekBarHeight = document.querySelector('.seek-bar').offsetHeight;
+            const totalHeight = headerHeight + seekBarHeight;
+            pageContainer.style.height = `calc(100vh - ${totalHeight}px)`;
+        };
+
+        window.onload = function() {
+            initPDFViewer();
+            attachButtonEvents();
+            resizePageContainer();
+            window.addEventListener('resize', resizePageContainer);
+        };
+    </script>
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Viewer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js" integrity="sha512-Z8CqofpIcnJN80feS2uccz+pXWgZzeKxDsDNMD/dJ6997/LSRY+W4NmEt9acwR+Gt9OHN0kkI1CTianCwoqcjQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .viewer-container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: #fff;
+        }
+        #pdfViewerDiv {
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            border-radius: 10px;
+            text-align: center;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        #pdfHeader {
+            font-size: 24px;
+            margin: 10px 0;
+        }
+        #pageContainer {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .canvasContainer {
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+            vertical-align: top;
+        }
+        #canvas1Container {
+            display: flex;
+            justify-content: flex-end;
+        }
+        #canvas2Container {
+            display: flex;
+            justify-content: flex-start;
+        }
+        canvas {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .page-number, .tooltip {
+            position: absolute;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(245, 245, 245, 0.8);
+            border-radius: 10px;
+            padding: 5px 10px;
+            font-size: 16px;
+            color: #555;
+            box-shadow: 0px 2px 4px rgba(0,0,0,0.2);
+            z-index: 15;
+            display: none;
+        }
+        .tooltip {
+            top: -30px;
+            font-size: 12px;
+        }
+        .btn {
+            position: absolute;
+            top: 50%;
+            font-size: 20px;
+            padding: 8px 12px;
+            cursor: pointer;
+            transform: translateY(-50%);
+            background: #f5f5f5;
+            border: none;
+            color: #555;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            z-index: 10;
+        }
+        .btn:hover {
+            background-color: #e1e1e1;
+        }
+        #prev {
+            left: 10px;
+        }
+        #next {
+            right: 10px;
+        }
+        .seek-bar {
+            display: inline-block;
+            width: 100%;
+            padding: 10px 0;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+        }
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 80%;
+            height: 8px;
+            border-radius: 5px;
+            background: #555;
+            cursor: pointer;
+            outline: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #888;
+            cursor: pointer;
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #888;
+            cursor: pointer;
+        }
+
+        /* Media Queries for responsiveness */
+        @media (max-width: 1024px) {
+            .canvasContainer {
+                width: 100%;
+                height: calc(100% - 50px); /* Adjust height to leave space for the seek bar */
+            }
+            #canvas1Container {
+                justify-content: center;
+            }
+            #canvas2Container {
+                display: none;
+            }
+            .btn {
+                display: none;
+            }
+            canvas {
+                border-radius: 0;
+                box-shadow: none;
+            }
+            .seek-bar {
+                width: 100%;
+                background: rgba(255, 255, 255, 0.5);
+                backdrop-filter: blur(10px);
+                padding: 10px 0;
+                box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+                border-top: 1px solid rgba(255, 255, 255, 0.3);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            }
+        }
+
+
+        
+        .book-description {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 97%;
+            max-width: 1200px;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .left-content, .right-content {
+            width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .left-content {
+                width: calc(60% - 10px);
+            }
+
+            .right-content {
+                width: calc(40% - 10px);
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+            }
+
+            .right-content h1 {
+                margin-left: auto;
+                text-align: right;
+            }
+        }
+
+        @media (max-width: 767px) { /* Mobile devices */
+            .book-description h1 {
+                font-size: 22px; /* Larger font size for mobile */
+            }
+            .book-description h1 span {
+                font-size: 14px;
+                padding: 5px 10px;
+            }
+            .book-description {
+                font-size: 110%; /* Larger text to fit more content on the screen */
+                padding: 20px; /* Increased padding for smaller screens */
+            }
+            .left-content {
+                position: relative;
+            }
+            .right-content {
+                display: block;
+                text-align: right;
+                margin-top: 20px;
+            }
+            .right-content h1 {
+                text-align: right;
+            }
+            .user-rating-container {
+                width: calc(100% - 40px); /* Adjust width for mobile */
+                max-width: none;
+            }
+        }
+
+        @media (max-width: 480px) { /* Very small devices */
+            .book-description h1 {
+                font-size: 20px; /* Larger font size for very small devices */
+            }
+            .book-description h1 span {
+                font-size: 12px;
+                padding: 5px 10px;
+            }
+            .book-description {
+                font-size: 120%; /* Even larger text for very small screens */
+                padding: 20px; /* Increased padding for very small screens */
+            }
+            .user-rating-container {
+                width: calc(100% - 40px); /* Adjust width for very small devices */
+                max-width: none;
+                padding: 10px;
+            }
+        }
+
+        .book-description h1 {
+            font-size: 24px;
+            color: #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin: 0 0 10px;
+            position: relative;
+        }
+
+        .book-description h1 span {
+            font-size: 14px;
+            color: #ff6600d7;
+            background: #fff7e6;
+            padding: 5px 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: absolute;
+            right: -10px;
+            top: -5px;
+        }
+
+        .rating {
+            background: #d4edda;
+            color: #155724;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .tagline {
+            background: #d4edda;
+            color: #155724;
+            padding: 5px 10px;
+            border-radius: 15px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tags .tag {
+            background: #f0f0f0;
+            color: #333;
+            padding: 5px 10px;
+            border-radius: 15px;
+            display: inline-block;
+        }
+
+        .user-rating-container {
+            background: #f4f4f4;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+            position: relative;
+            border: 3px solid #134ad6;
+            overflow: auto; /* Enable horizontal scrolling */
+            width: 100%;
+            max-width: none; /* Remove max-width to ensure it fits its container */
+        }
+
+        .user-rating-container legend {
+            font-size: 16px;
+            color: #134ad6;
+            position: relative;
+            z-index: 1;
+            background: #fff;
+            padding: 2px 10px;
+            border-radius: 5px;
+        }
+
+        .user-rating {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .user-rating input {
+            display: none;
+        }
+
+        .user-rating label {
+            font-size: 30px;
+            color: #ccc;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .user-rating label:hover,
+        .user-rating label:hover ~ label,
+        .user-rating input:checked ~ label {
+            color: #ff0000;
+        }
+
+        .review-section {
+            background: #f4f4f4;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+            position: relative;
+            border: 3px solid #134ad6;
+            overflow: hidden;
+            width: 75%; /* Occupy 75% width */
+            max-width: 1200px; /* Ensure it doesn't exceed 1200px */
+            margin-left: auto;
+            margin-right: auto; /* Center the review section */
+        }
+
+        .review-section legend {
+            font-size: 16px;
+            color: #134ad6;
+            position: relative;
+            z-index: 1;
+            background: #fff;
+            padding: 2px 10px;
+            border-radius: 5px;
+        }
+
+        .review-section textarea {
+            width: 100%;
+            height: 100px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .review-section button {
+            background-color: #134ad6;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .single-review {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        
+
+        .book-description, .view-container {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 97%;
+            max-width: 1200px;
+            padding: 20px;
+            margin-bottom: 20px; /* Space between elements */
+        }
+
+        @media (max-width: 1024px) {
+            .canvasContainer {
+                width: 100%;
+                height: calc(100% - 50px); /* Adjust height to leave space for the seek bar */
+            }
+            #canvas1Container {
+                justify-content: center;
+            }
+            #canvas2Container {
+                display: none;
+            }
+            .btn {
+                display: none;
+            }
+            canvas {
+                border-radius: 0;
+                box-shadow: none;
+            }
+            .seek-bar {
+                width: 100%;
+                background: rgba(255, 255, 255, 0.5);
+                backdrop-filter: blur(10px);
+                padding: 10px 0;
+                box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+                border-top: 1px solid rgba(255, 255, 255, 0.3);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            }
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="viewer-container">
+        <div id="pdfViewerDiv">
+            <div id="pdfHeader">PDF Viewer</div>
+            <div id="pageContainer">
+                <div id="canvas1Container" class="canvasContainer">
+                    <canvas id="canvas1"></canvas>
+                </div>
+                <div id="canvas2Container" class="canvasContainer">
+                    <canvas id="canvas2"></canvas>
+                </div>
+                <div class="page-number" id="pageNumber">Page 1 of x</div>
+                <button id="prev" class="btn">&#x25C0;</button>
+                <button id="next" class="btn">&#x25B6;</button>
+            </div>
+            <div class="seek-bar">
+                <input type="range" id="pageSlider" min="1" max="100" value="1">
+                <div class="tooltip" id="tooltip">Page 1</div>
+            </div>
+        </div>
+    </div>    
+    <div class="book-description">
+        <div class="left-content">
+            <h1>
+                Book Name
+            </h1>
+            <div class="rating">4.5★</div>
+            <div class="tagline">Curated with Care</div>
+            <div class="tags">
+                <div class="tag">Tag1</div>
+                <div class="tag">Tag2</div>
+                <div class="tag">Tag3</div>
+            </div>
+        </div>
+        <div class="right-content">
+            <h1>
+                <span>🔥Trending</span>
+            </h1>
+            <fieldset class="user-rating-container">
+                <legend>Tell us what you think</legend>
+                <div class="user-rating">
+                    <input type="radio" id="star5" name="rating" value="1"><label for="star5">★</label>
+                    <input type="radio" id="star4" name="rating" value="2"><label for="star4">★</label>
+                    <input type="radio" id="star3" name="rating" value="3"><label for="star3">★</label>
+                    <input type="radio" id="star2" name="rating" value="4"><label for="star2">★</label>
+                    <input type="radio" id="star1" name="rating" value="5"><label for="star1">★</label>
+                </div>
+            </fieldset>
+        </div>
+    
+        <div class="review-section">
+            <legend>Leave a Review</legend>
+            <textarea placeholder="Write your review here..."></textarea>
+            <button>Submit Review</button>
+        </div>
+    
+    
+    </div>
+
+
+    <script>
+
+
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min.js';
+
+        let pdfDoc = null;
+        let pageNum = 1;
+        let pageCount = 0;
+        let isRendering = false;
+        let scaleFactor = 4; // Extreme clarity scale factor
+
+        const base64Data = "<%= fileData %>";
+        const fileType = "<%= fileType %>";
+        const pdfData = `data:${fileType};base64,${base64Data}`;
+
+        const initPDFViewer = () => {
+            console.log("In initPDFViewer func");
+            pdfjsLib.getDocument({ url: pdfData }).promise.then(pdf => {
+                console.log("In pdfjsLib.getDocument");
+                pdfDoc = pdf;
+                pageCount = pdf.numPages;
+                document.getElementById('pageSlider').max = pageCount;
+                renderPages(pageNum);
+            }).catch(error => {
+                console.log(error);
+            });
+        };
+
+        const renderPages = (num) => {
+            if (isRendering) return;
+            isRendering = true;
+            const canvas1 = document.getElementById('canvas1');
+            const canvas2 = document.getElementById('canvas2');
+            const containerWidth = document.getElementById('pageContainer').clientWidth;
+            const containerHeight = document.getElementById('pageContainer').clientHeight;
+
+            if (containerWidth > 1024) {
+                num = num % 2 === 0 ? num - 1 : num;
+                renderPage(num, canvas1, 'canvas1Container');
+                renderPage(num + 1, canvas2, 'canvas2Container');
+                canvas2.parentElement.style.display = 'flex';
+            } else {
+                renderPage(num, canvas1, 'canvas1Container');
+                canvas2.parentElement.style.display = 'none';
+            }
+            document.getElementById('pageSlider').value = num;
+        };
+
+        const renderPage = (num, canvas, containerId) => {
+            if (num > pageCount) {
+                canvas.style.display = 'none';
+                return;
+            }
+            canvas.style.display = 'block';
+            pdfDoc.getPage(num).then(page => {
+                let viewport = page.getViewport({ scale: 1 });
+                let containerWidth = document.getElementById('pageContainer').clientWidth;
+                let containerHeight = document.getElementById('pageContainer').clientHeight;
+                let scale = Math.min(containerWidth / viewport.width, containerHeight / viewport.height);
+                viewport = page.getViewport({ scale: scale * scaleFactor });
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+                canvas.style.height = `${viewport.height / scaleFactor}px`;
+                canvas.style.width = `${viewport.width / scaleFactor}px`;
+                let context = canvas.getContext('2d');
+
+                let renderContext = {
+                    canvasContext: context,
+                    viewport: viewport
+                };
+
+                page.render(renderContext).promise.then(() => {
+                    isRendering = false;
+                    document.getElementById('pageNumber').textContent = `Page ${num} of ${pageCount}`;
+                    document.getElementById('pageNumber').style.display = 'block';
+
+                    const canvasContainer = document.getElementById(containerId);
+                    canvasContainer.style.width = `${canvas.width / scaleFactor}px`;
+                    canvasContainer.style.height = `${canvas.height / scaleFactor}px`;
+                });
+            }).catch(error => {
+                console.log(error);
+                isRendering = false;
+            });
+        };
+
+        const attachButtonEvents = () => {
+            console.log("In attachButtonEvents func");
+            document.getElementById('next').addEventListener('click', () => {
+                if (pageNum < pageCount && !isRendering) {
+                    pageNum += 2;
+                    renderPages(pageNum);
+                }
+            });
+
+            document.getElementById('prev').addEventListener('click', () => {
+                if (pageNum > 1 && !isRendering) {
+                    pageNum -= 2;
+                    renderPages(pageNum);
+                }
+            });
+
+            const slider = document.getElementById('pageSlider');
+            const tooltip = document.getElementById('tooltip');
+
+            slider.addEventListener('input', () => {
+                let selectedPage = parseInt(slider.value);
+                tooltip.textContent = `Page ${selectedPage}`;
+                tooltip.style.display = 'block';
+                const sliderRect = slider.getBoundingClientRect();
+                const tooltipRect = tooltip.getBoundingClientRect();
+                const thumbWidth = 20; // Width of the slider thumb
+                const thumbOffset = thumbWidth / 2;
+                const tooltipX = sliderRect.left + (sliderRect.width * (slider.value - slider.min) / (slider.max - slider.min)) - thumbOffset - (tooltipRect.width / 2);
+                tooltip.style.left = `${tooltipX}px`;
+            });
+
+            slider.addEventListener('change', () => {
+                let selectedPage = parseInt(slider.value);
+                if (!isRendering && selectedPage !== pageNum) {
+                    pageNum = selectedPage;
+                    renderPages(pageNum);
+                }
+                tooltip.style.display = 'none';
+            });
+
+            slider.addEventListener('blur', () => {
+                tooltip.style.display = 'none';
+            });
+        };
+
+        const resizePageContainer = () => {
+            const pageContainer = document.getElementById('pageContainer');
+            const pdfViewerDiv = document.getElementById('pdfViewerDiv');
+            const headerHeight = document.getElementById('pdfHeader').offsetHeight;
+            const seekBarHeight = document.querySelector('.seek-bar').offsetHeight;
+            const totalHeight = headerHeight + seekBarHeight;
+            pageContainer.style.height = `calc(100vh - ${totalHeight}px)`;
+        };
+
+        const addSwipeListeners = () => {
+            let touchStartX = 0;
+            let touchEndX = 0;
+
+            const handleGesture = () => {
+                if (touchEndX < touchStartX - 50 && pageNum < pageCount && !isRendering) {
+                    pageNum += 1;
+                    renderPages(pageNum);
+                }
+
+                if (touchEndX > touchStartX + 50 && pageNum > 1 && !isRendering) {
+                    pageNum -= 1;
+                    renderPages(pageNum);
+                }
+            };
+
+            document.getElementById('pageContainer').addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            });
+
+            document.getElementById('pageContainer').addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleGesture();
+            });
+        };
+
+        window.onload = function() {
+            console.log("In window.onload");
+            initPDFViewer();
+            attachButtonEvents();
+            resizePageContainer();
+            addSwipeListeners();
+            window.addEventListener('resize', resizePageContainer);
+        };
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const stars = document.querySelectorAll('.user-rating label');
+            const radios = document.querySelectorAll('.user-rating input');
+    
+            function setHoverState(event) {
+                const value = parseInt(event.target.previousElementSibling.value);
+                stars.forEach((star, index) => {
+                    star.style.color = index < value ? (value <= 1 ? '#FF0000' : value <= 3 ? '#FFD700' : '#008000') : '#ccc';
+                });
+            }
+    
+            function clearHoverState() {
+                stars.forEach(star => star.style.color = '#ccc');
+                setClickedState();
+            }
+    
+            function setClickedState() {
+                radios.forEach((radio, index) => {
+                    if (radio.checked) {
+                        const value = parseInt(radio.value);
+                        stars.forEach((star, i) => {
+                            star.style.color = i < value ? (value <= 1 ? '#FF0000' : value <= 3 ? '#FFD700' : '#008000') : '#ccc';
+                        });
+                    }
+                });
+            }
+    
+            stars.forEach(star => {
+                star.addEventListener('mouseover', setHoverState);
+                star.addEventListener('mouseout', clearHoverState);
+                star.addEventListener('click', setClickedState);
+            });
+    
+            radios.forEach(radio => {
+                radio.addEventListener('change', setClickedState);
+            });
+        });
+
+
+    </script>
+</body>
+</html>

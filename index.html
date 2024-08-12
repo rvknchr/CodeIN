@@ -1,0 +1,500 @@
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+      rel="stylesheet"
+      as="style"
+      onload="this.rel='stylesheet'"
+      href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Plus+Jakarta+Sans%3Awght%40400%3B500%3B700%3B800"
+    />
+
+    <title>Galileo Design</title>
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  </head>
+  <body>
+    <div
+      class="relative flex size-full min-h-screen flex-col bg-white group/design-root overflow-x-hidden"
+      style="font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif"
+    >
+      <div class="layout-container flex h-full grow flex-col">
+        <header
+          class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#f0f3f4] px-4 py-3 sm:px-10"
+        >
+          <div class="flex items-center gap-8">
+            <div class="flex items-center gap-4 text-[#111518]">
+              <div class="size-4">
+                <svg
+                  viewBox="0 0 48 48"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M4 42.4379C4 42.4379 14.0962 36.0744 24 41.1692C35.0664 46.8624 44 42.2078 44 42.2078L44 7.01134C44 7.01134 35.068 11.6577 24.0031 5.96913C14.0971 0.876274 4 7.27094 4 7.27094L4 42.4379Z"
+                    fill="currentColor"
+                  ></path>
+                </svg>
+              </div>
+              <h2
+                class="text-[#111518] text-lg font-bold leading-tight tracking-[-0.015em]"
+              >
+                Book Lovers
+              </h2>
+            </div>
+            <nav class="hidden lg:flex items-center gap-9">
+              <a
+                class="text-[#111518] text-sm font-medium leading-normal"
+                href="#"
+                >Explore</a
+              >
+              <a
+                class="text-[#111518] text-sm font-medium leading-normal"
+                href="#"
+                >Genres</a
+              >
+              <a
+                class="text-[#111518] text-sm font-medium leading-normal"
+                href="#"
+                >Audiobooks</a
+              >
+              <a
+                class="text-[#111518] text-sm font-medium leading-normal"
+                href="#"
+                >News</a
+              >
+              <a
+                class="text-[#111518] text-sm font-medium leading-normal"
+                href="#"
+                >Join</a
+              >
+              <a
+                class="text-[#111518] text-sm font-medium leading-normal"
+                href="#"
+                >Sign In</a
+              >
+            </nav>
+          </div>
+          <div class="flex flex-1 justify-end gap-8">
+            <button
+              class="lg:hidden flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 bg-[#f0f3f4] text-[#111518] gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5"
+              onclick="document.getElementById('mobile-menu').classList.toggle('hidden')"
+            >
+              <div
+                class="text-[#111518]"
+                data-icon="List"
+                data-size="20px"
+                data-weight="regular"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20px"
+                  height="20px"
+                  fill="currentColor"
+                  viewBox="0 0 256 256"
+                >
+                  <path
+                    d="M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128ZM40,72H216a8,8,0,0,0,0-16H40a8,8,0,0,0,0,16ZM216,184H40a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16Z"
+                  ></path>
+                </svg>
+              </div>
+            </button>
+          </div>
+        </header>
+
+        <div class="px-40 flex flex-1 justify-center py-5">
+          <div
+            class="layout-content-container flex flex-col max-w-[960px] flex-1"
+          >
+            <div class="@container">
+              <div class="@[480px]:p-4">
+                <div
+                  class="flex min-h-[480px] flex-col gap-6 bg-cover bg-center bg-no-repeat @[480px]:gap-8 @[480px]:rounded-xl items-center justify-center p-4"
+                  style="
+                    background-image: linear-gradient(
+                        rgba(0, 0, 0, 0.1) 0%,
+                        rgba(0, 0, 0, 0.4) 100%
+                      ),
+                      url('https://cdn.usegalileo.ai/sdxl10/50e7c478-352d-45fb-be94-a915482fe7e6.png');
+                  "
+                >
+                  <h1
+                    class="text-white text-4xl font-black leading-tight tracking-[-0.033em] @[480px]:text-5xl @[480px]:font-black @[480px]:leading-tight @[480px]:tracking-[-0.033em] text-center"
+                  >
+                    Find your next favorite book
+                  </h1>
+                  <label
+                    class="flex flex-col min-w-40 h-14 w-full max-w-[480px] @[480px]:h-16"
+                  >
+                    <div
+                      class="flex w-full flex-1 items-stretch rounded-xl h-full"
+                    >
+                      <div
+                        class="text-[#637888] flex border border-[#dce1e5] bg-white items-center justify-center pl-[15px] rounded-l-xl border-r-0"
+                        data-icon="MagnifyingGlass"
+                        data-size="20px"
+                        data-weight="regular"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20px"
+                          height="20px"
+                          fill="currentColor"
+                          viewBox="0 0 256 256"
+                        >
+                          <path
+                            d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"
+                          ></path>
+                        </svg>
+                      </div>
+                      <input
+                        placeholder="Search for books, authors, or genres"
+                        class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#111518] focus:outline-0 focus:ring-0 border border-[#dce1e5] bg-white focus:border-[#dce1e5] h-full placeholder:text-[#637888] px-[15px] rounded-r-none border-r-0 pr-2 rounded-l-none border-l-0 pl-2 text-sm font-normal leading-normal @[480px]:text-base @[480px]:font-normal @[480px]:leading-normal"
+                        value=""
+                      />
+                      <div
+                        class="flex items-center justify-center rounded-r-xl border-l-0 border border-[#dce1e5] bg-white pr-[7px]"
+                      >
+                        <button
+                          class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 @[480px]:h-12 @[480px]:px-5 bg-[#339be6] text-white text-sm font-bold leading-normal tracking-[0.015em] @[480px]:text-base @[480px]:font-bold @[480px]:leading-normal @[480px]:tracking-[0.015em]"
+                        >
+                          <span class="truncate">Search</span>
+                        </button>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <h2
+              class="text-[#111518] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5"
+            >
+              Popular Genres
+            </h2>
+            <div
+              class="grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-3 p-4"
+            >
+              <div class="flex flex-col gap-3 pb-3">
+                <div
+                  class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
+                  style="
+                    background-image: url('https://cdn.usegalileo.ai/stability/25093e86-ce1d-4eca-8f95-b2662be5c4bd.png');
+                  "
+                ></div>
+                <p class="text-[#111518] text-base font-medium leading-normal">
+                  Fiction
+                </p>
+              </div>
+              <div class="flex flex-col gap-3 pb-3">
+                <div
+                  class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
+                  style="
+                    background-image: url('https://cdn.usegalileo.ai/stability/54911aad-a041-4b2c-b604-581a205c513a.png');
+                  "
+                ></div>
+                <p class="text-[#111518] text-base font-medium leading-normal">
+                  Mystery
+                </p>
+              </div>
+              <div class="flex flex-col gap-3 pb-3">
+                <div
+                  class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
+                  style="
+                    background-image: url('https://cdn.usegalileo.ai/stability/d90b4730-2f39-4677-a344-b1ce3a59a7e7.png');
+                  "
+                ></div>
+                <p class="text-[#111518] text-base font-medium leading-normal">
+                  Romance
+                </p>
+              </div>
+              <div class="flex flex-col gap-3 pb-3">
+                <div
+                  class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
+                  style="
+                    background-image: url('https://cdn.usegalileo.ai/stability/88532ec5-2fea-4208-ba0d-427248937865.png');
+                  "
+                ></div>
+                <p class="text-[#111518] text-base font-medium leading-normal">
+                  Fantasy
+                </p>
+              </div>
+              <div class="flex flex-col gap-3 pb-3">
+                <div
+                  class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
+                  style="
+                    background-image: url('https://cdn.usegalileo.ai/stability/5e14679d-f47c-40f5-8574-3e01fb5910ea.png');
+                  "
+                ></div>
+                <p class="text-[#111518] text-base font-medium leading-normal">
+                  Young Adult
+                </p>
+              </div>
+              <div class="flex flex-col gap-3 pb-3">
+                <div
+                  class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
+                  style="
+                    background-image: url('https://cdn.usegalileo.ai/stability/d1507e40-5f8e-4c10-8c9d-7b5b4e09fb4a.png');
+                  "
+                ></div>
+                <p class="text-[#111518] text-base font-medium leading-normal">
+                  Science Fiction
+                </p>
+              </div>
+              <div class="flex flex-col gap-3 pb-3">
+                <div
+                  class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
+                  style="
+                    background-image: url('https://cdn.usegalileo.ai/stability/bc0b72df-5851-45fe-a10c-e71da5820773.png');
+                  "
+                ></div>
+                <p class="text-[#111518] text-base font-medium leading-normal">
+                  Biography
+                </p>
+              </div>
+            </div>
+            <div class="@container">
+              <div class="@[480px]:p-4">
+                <div
+                  class="flex min-h-[480px] flex-col gap-6 bg-cover bg-center bg-no-repeat @[480px]:gap-8 @[480px]:rounded-xl items-center justify-center p-4"
+                  style="
+                    background-image: linear-gradient(
+                        rgba(0, 0, 0, 0.1) 0%,
+                        rgba(0, 0, 0, 0.4) 100%
+                      ),
+                      url('https://cdn.usegalileo.ai/sdxl10/0b388d90-545e-47c8-9224-ff3ca4b2fd31.png');
+                  "
+                >
+                  <h1
+                    class="text-white text-4xl font-black leading-tight tracking-[-0.033em] @[480px]:text-5xl @[480px]:font-black @[480px]:leading-tight @[480px]:tracking-[-0.033em] text-center"
+                  >
+                    Donate a Book
+                  </h1>
+                  <label
+                    class="flex flex-col min-w-40 h-14 w-full max-w-[480px] @[480px]:h-16"
+                  >
+                    <div
+                      class="flex w-full flex-1 items-stretch rounded-xl h-full"
+                    >
+                      <div
+                        class="text-[#637888] flex border border-[#dce1e5] bg-white items-center justify-center pl-[15px] rounded-l-xl border-r-0"
+                        data-icon="MagnifyingGlass"
+                        data-size="20px"
+                        data-weight="regular"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20px"
+                          height="20px"
+                          fill="currentColor"
+                          viewBox="0 0 256 256"
+                        >
+                          <path
+                            d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"
+                          ></path>
+                        </svg>
+                      </div>
+                      <input
+                        placeholder="Search for books to donate"
+                        class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#111518] focus:outline-0 focus:ring-0 border border-[#dce1e5] bg-white focus:border-[#dce1e5] h-full placeholder:text-[#637888] px-[15px] rounded-r-none border-r-0 pr-2 rounded-l-none border-l-0 pl-2 text-sm font-normal leading-normal @[480px]:text-base @[480px]:font-normal @[480px]:leading-normal"
+                        value=""
+                      />
+                      <div
+                        class="flex items-center justify-center rounded-r-xl border-l-0 border border-[#dce1e5] bg-white pr-[7px]"
+                      >
+                        <button
+                          class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 @[480px]:h-12 @[480px]:px-5 bg-[#339be6] text-white text-sm font-bold leading-normal tracking-[0.015em] @[480px]:text-base @[480px]:font-bold @[480px]:leading-normal @[480px]:tracking-[0.015em]"
+                        >
+                          <span class="truncate">Search</span>
+                        </button>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <h2
+              class="text-[#111518] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5"
+            >
+              About Us
+            </h2>
+            <p
+              class="text-[#111518] text-base font-normal leading-normal pb-3 pt-1 px-4"
+            >
+              We are a community of book lovers, dedicated to sharing our
+              passion for the written word. Our mission is to foster a love of
+              reading, and to provide access to books for all.
+            </p>
+            <div class="@container">
+              <div class="@[480px]:p-4">
+                <div
+                  class="flex min-h-[480px] flex-col gap-6 bg-cover bg-center bg-no-repeat @[480px]:gap-8 @[480px]:rounded-xl items-center justify-center p-4"
+                  style="
+                    background-image: linear-gradient(
+                        rgba(0, 0, 0, 0.1) 0%,
+                        rgba(0, 0, 0, 0.4) 100%
+                      ),
+                      url('https://cdn.usegalileo.ai/sdxl10/0b388d90-545e-47c8-9224-ff3ca4b2fd31.png');
+                  "
+                >
+                  <h1
+                    class="text-white text-4xl font-black leading-tight tracking-[-0.033em] @[480px]:text-5xl @[480px]:font-black @[480px]:leading-tight @[480px]:tracking-[-0.033em] text-center"
+                  >
+                    Donate a Book
+                  </h1>
+                  <label
+                    class="flex flex-col min-w-40 h-14 w-full max-w-[480px] @[480px]:h-16"
+                  >
+                    <div
+                      class="flex w-full flex-1 items-stretch rounded-xl h-full"
+                    >
+                      <div
+                        class="text-[#637888] flex border border-[#dce1e5] bg-white items-center justify-center pl-[15px] rounded-l-xl border-r-0"
+                        data-icon="MagnifyingGlass"
+                        data-size="20px"
+                        data-weight="regular"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20px"
+                          height="20px"
+                          fill="currentColor"
+                          viewBox="0 0 256 256"
+                        >
+                          <path
+                            d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"
+                          ></path>
+                        </svg>
+                      </div>
+                      <input
+                        placeholder="Search for books to donate"
+                        class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#111518] focus:outline-0 focus:ring-0 border border-[#dce1e5] bg-white focus:border-[#dce1e5] h-full placeholder:text-[#637888] px-[15px] rounded-r-none border-r-0 pr-2 rounded-l-none border-l-0 pl-2 text-sm font-normal leading-normal @[480px]:text-base @[480px]:font-normal @[480px]:leading-normal"
+                        value=""
+                      />
+                      <div
+                        class="flex items-center justify-center rounded-r-xl border-l-0 border border-[#dce1e5] bg-white pr-[7px]"
+                      >
+                        <button
+                          class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 @[480px]:h-12 @[480px]:px-5 bg-[#339be6] text-white text-sm font-bold leading-normal tracking-[0.015em] @[480px]:text-base @[480px]:font-bold @[480px]:leading-normal @[480px]:tracking-[0.015em]"
+                        >
+                          <span class="truncate">Search</span>
+                        </button>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+              </div>
+              <h2
+                class="text-[#111518] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5"
+              >
+                About Us
+              </h2>
+              <p
+                class="text-[#111518] text-base font-normal leading-normal pb-3 pt-1 px-4"
+              >
+                We are a community of book lovers, dedicated to sharing our
+                passion for the written word. Our mission is to foster a love of
+                reading, and to provide access to books for all.
+              </p>
+
+              <!-- Form Container -->
+              <div
+                class="px-4 sm:px-10 lg:px-40 xl:px-60 flex flex-1 justify-center py-5"
+              >
+                <div
+                  class="layout-content-container flex flex-col max-w-[1280px] flex-1"
+                >
+                  <div class="@container p-4">
+                    <form
+                      class="flex flex-col gap-6 bg-white p-6 rounded-xl shadow-lg"
+                    >
+                      <h2 class="text-2xl font-bold text-[#111518]">
+                        Join Our Newsletter
+                      </h2>
+                      <label class="flex flex-col gap-2">
+                        <span class="text-[#111518] text-sm font-medium"
+                          >Name</span
+                        >
+                        <input
+                          type="text"
+                          placeholder="Enter your name"
+                          class="form-input w-full resize-none overflow-hidden rounded-xl text-[#111518] border border-[#dce1e5] focus:outline-0 focus:ring-0 px-4 py-2 placeholder:text-[#637888]"
+                        />
+                      </label>
+                      <label class="flex flex-col gap-2">
+                        <span class="text-[#111518] text-sm font-medium"
+                          >Email</span
+                        >
+                        <input
+                          type="email"
+                          placeholder="Enter your email"
+                          class="form-input w-full resize-none overflow-hidden rounded-xl text-[#111518] border border-[#dce1e5] focus:outline-0 focus:ring-0 px-4 py-2 placeholder:text-[#637888]"
+                        />
+                      </label>
+                      <button
+                        type="submit"
+                        class="bg-[#111518] text-white text-sm font-bold rounded-xl py-3 px-6"
+                      >
+                        Subscribe
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Footer -->
+              <footer class="bg-[#111518] text-white py-10">
+                <div class="container mx-auto flex flex-col items-center">
+                  <div class="flex space-x-6">
+                    <a href="#" class="text-[#637888] hover:text-white">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-6 w-6"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M22.675 0h-21.35c-.733 0-1.325.592-1.325 1.325v21.351c0 .732.592 1.324 1.325 1.324h11.497v-9.294h-3.121v-3.622h3.121v-2.667c0-3.1 1.894-4.788 4.659-4.788 1.325 0 2.464.099 2.795.143v3.24h-1.918c-1.504 0-1.796.715-1.796 1.763v2.31h3.587l-.467 3.622h-3.12v9.294h6.116c.733 0 1.325-.592 1.325-1.324v-21.351c0-.733-.592-1.325-1.325-1.325z"
+                        />
+                      </svg>
+                    </a>
+                    <a href="#" class="text-[#637888] hover:text-white">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-6 w-6"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.896-.955-2.173-1.555-3.591-1.555-2.717 0-4.917 2.2-4.917 4.917 0 .385.043.761.127 1.122-4.083-.205-7.702-2.161-10.125-5.134-.423.724-.666 1.562-.666 2.457 0 1.695.863 3.191 2.178 4.069-.803-.026-1.56-.246-2.22-.615v.062c0 2.364 1.682 4.338 3.918 4.785-.41.112-.842.172-1.287.172-.315 0-.624-.031-.927-.088.625 1.953 2.443 3.377 4.6 3.416-1.68 1.317-3.808 2.103-6.115 2.103-.398 0-.79-.023-1.177-.069 2.179 1.396 4.768 2.211 7.548 2.211 9.057 0 14.01-7.506 14.01-14.01 0-.213-.005-.426-.015-.637.962-.695 1.8-1.562 2.46-2.549z"
+                        />
+                      </svg>
+                    </a>
+                    <a href="#" class="text-[#637888] hover:text-white">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-6 w-6"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 6.016 4.429 10.987 10.205 11.854v-8.396h-3.084v-3.458h3.084v-2.634c0-3.045 1.792-4.715 4.533-4.715 1.312 0 2.686.235 2.686.235v2.946h-1.514c-1.491 0-1.954.93-1.954 1.882v2.286h3.328l-.532 3.458h-2.796v8.396c5.776-.867 10.205-5.838 10.205-11.854z"
+                        />
+                      </svg>
+                    </a>
+                  </div>
+                  <div class="mt-8 text-[#637888] text-sm">
+                    <a href="#" class="hover:text-white mx-4">Privacy Policy</a>
+                    <a href="#" class="hover:text-white mx-4"
+                      >Terms of Service</a
+                    >
+                    <a href="#" class="hover:text-white mx-4">Contact Us</a>
+                  </div>
+                </div>
+              </footer>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

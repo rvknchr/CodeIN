@@ -25,7 +25,12 @@ app.get("/books", async function(req, res) {
   try {
     await connectDB();
     const JavaBook = createBookModel('Python');
-    const books = await JavaBook.find().select('name authors rating subject');
+    
+    const books = await JavaBook.find()
+      .select('name authors rating subject')
+      .sort({ rating: -1 })
+      .limit(12);
+
     res.render("bodyBooks", { books: books });
   } catch (err) {
     res.status(500).send(err);

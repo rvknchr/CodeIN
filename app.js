@@ -1,4 +1,3 @@
-
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
@@ -41,7 +40,7 @@ app.get("/books", async function(req, res) {
         .limit(12);
     }
 
-    res.render("bodyBooks", { booksData: data });
+    res.render("booksCatalog", { booksData: data });
   } catch (err) {
     res.status(500).send(err);
   } finally {
@@ -63,7 +62,7 @@ app.get("/books/:subject/:bookName", async function(req, res) {
       return res.status(404).send("Book not found");
     }
 
-    res.render("book1", { fileData: book.file.fileData, fileType: book.file.fileType });
+    res.render("bookViewer", { fileData: book.file.fileData, fileType: book.file.fileType });
   } catch (err) {
     console.log(err);
     console.log("Error Here");

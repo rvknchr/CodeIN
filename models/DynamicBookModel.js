@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const bookSchema = require('./BookSchema');
 
 const createBookModel = (subject) => {
-    const collectionName = `${subject}DB`; // Example: JavaDB, C++DB
+    const collectionName = subject; // Example: Java, Cpp
     return mongoose.model(collectionName, bookSchema, collectionName);
 };
 

@@ -10,10 +10,8 @@ const prompt = require('prompt-sync')();
 const util = require('util');
 const appendFile = util.promisify(fs.appendFile);
 
-// Set the Google API credentials using the environment variable
 process.env.GOOGLE_APPLICATION_CREDENTIALS = path.resolve(process.env.GOOGLE_APPLICATION_CREDENTIALS);
 
-// Initialize the Google Drive API client
 const auth = new google.auth.GoogleAuth({
     keyFile: process.env.GOOGLE_APPLICATION_CREDENTIALS,
     scopes: ['https://www.googleapis.com/auth/drive.readonly'],
@@ -21,7 +19,6 @@ const auth = new google.auth.GoogleAuth({
 
 const drive = google.drive({ version: 'v3', auth });
 
-// Function to list files in a Google Drive folder
 async function listFilesInFolder(folderId) {
     const res = await drive.files.list({
         q: `'${folderId}' in parents and mimeType='application/pdf'`,
@@ -30,7 +27,6 @@ async function listFilesInFolder(folderId) {
     return res.data.files;
 }
 
-// Function to stream and encode a file in Base64
 async function streamFileData(fileId) {
     const bufferStream = new WritableStreamBuffer();
     const res = await drive.files.get({ fileId, alt: 'media' }, { responseType: 'stream' });
@@ -45,23 +41,20 @@ async function streamFileData(fileId) {
     return bufferStream.getContents().toString('base64');
 }
 
-// Function to calculate the size of a MongoDB document
 function calculateDocumentSize(doc) {
     const bson = require('bson');
     const serialized = bson.serialize(doc);
     return serialized.length;
 }
 
-// Function to insert books into MongoDB
-async function insertBooks(folderId) {
+async function insertBooks(folderId, bookModel) {
     await connectDB();
     const notInsertedFilePath = path.join(__dirname, 'NotInserted.txt');
 
-    // Ensure the NotInserted.txt file exists and write the header
     if (!fs.existsSync(notInsertedFilePath)) {
-        fs.writeFileSync(notInsertedFilePath, `Folder ID: ${folderId}, Subject: Python\n`);
+        fs.writeFileSync(notInsertedFilePath, `Folder ID: ${folderId}, Subject: ${bookModel}\n`);
     } else {
-        await appendFile(notInsertedFilePath, `\nFolder ID: ${folderId}, Subject: Python\n`);
+        await appendFile(notInsertedFilePath, `\nFolder ID: ${folderId}, Subject: ${bookModel}\n`);
     }
 
     try {
@@ -72,7 +65,7 @@ async function insertBooks(folderId) {
             console.log(`File Size: ${file.size} Bytes`);
 
             // Check file size and ignore if greater than 16MB
-            if (parseInt(file.size, 10) >= 14 * 1024 * 1024) { // 16MB in bytes
+            if (parseInt(file.size, 10) >= 14 * 1024 * 1024) { // 14MB in bytes
                 console.log(`Skipping ${file.name}, size is greater than 16MB`);
                 await appendFile(notInsertedFilePath, `${file.name}\n`);
                 continue;
@@ -87,9 +80,8 @@ async function insertBooks(folderId) {
                 continue;
             }
 
-            const Book = createBookModel('Python'); // Adjust the model name as necessary
+            const Book = createBookModel(bookModel);
 
-            // Prompt user to select the book type
             const bookTypes = ['Textbook', 'Notes', 'RoadMap', 'Project', 'PlacementMaterial'];
             console.log('Select the type of the book:');
             bookTypes.forEach((type, index) => {
@@ -98,8 +90,7 @@ async function insertBooks(folderId) {
             const typeIndex = prompt('Enter the number corresponding to the book type: ');
             const selectedType = bookTypes[typeIndex - 1];
 
-            // Prompt user for additional tags until they choose to stop
-            const tags = ['FrontEnd'];
+            const tags = [bookModel];
             let addMoreTags = true;
             while (addMoreTags) {
                 const newTag = prompt('Enter a tag (or press Enter to stop adding tags): ');
@@ -112,18 +103,18 @@ async function insertBooks(folderId) {
 
             const newBookData = {
                 name: file.name,
-                authors: ['PH Community'], // Default author
-                tags: tags, // Add default and user-provided tags
-                rating: 0, // Default rating
-                reviews: [], // Default reviews
-                type: selectedType, // Use the user-selected type
+                authors: ['PH Community'],
+                tags: tags,
+                rating: 0,
+                reviews: [],
+                type: selectedType,
                 file: {
                     fileName: file.name,
                     fileType: file.mimeType,
-                    fileSize: parseInt(file.size, 10),  // Parse the file size as an integer
+                    fileSize: parseInt(file.size, 10),
                     fileData: fileData,
                 },
-                subject: 'FrontEnd', // Default subject, adjust as necessary
+                subject: bookModel,
             };
 
             // Calculate the document size
@@ -149,6 +140,6 @@ async function insertBooks(folderId) {
     }
 }
 
-// Usage example
-const folderId = '1pBwgUVffHIRAg8xsKQVpC7bixPCj_zqZ'; // Replace with your Google Drive folder ID
-insertBooks(folderId);
+const folderId = '1F9n10ZcmN3OZ_bNCOmULWwzw7y9bigtU'; // prompt('Enter the FolderID: ');
+const bookModel = prompt('Enter the subject name: ');
+insertBooks(folderId, bookModel);

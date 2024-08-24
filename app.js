@@ -17,21 +17,31 @@ app.use(bodyParser.urlencoded({
 
 app.use(express.static("public"));
 
-app.get("/home", function(req, res) {
-  res.render("home");
+app.get("/", function(req, res) {
+  res.send("<h3>Landing page here</h3>");
+  // res.render("home");
 });
 
 app.get("/books", async function(req, res) {
   try {
     await connectDB();
-    const JavaBook = createBookModel('Python');
-    
-    const books = await JavaBook.find()
-      .select('name authors rating subject')
-      .sort({ rating: -1 })
-      .limit(12);
+    const collections = await mongoose.connection.db.listCollections().toArray();
+    const collectionNames = collections.map(coll => coll.name);
 
-    res.render("bodyBooks", { books: books });
+    console.log(collectionNames);
+    const data = {};
+
+    for (const collection of collectionNames) {
+      console.log(collection);
+      const BookModel = createBookModel(collection);
+
+      data[collection] = await BookModel.find()
+        .select('name authors rating subject')
+        // .sort({ rating: -1 })
+        .limit(12);
+    }
+
+    res.render("bodyBooks", { booksData: data });
   } catch (err) {
     res.status(500).send(err);
   } finally {
@@ -39,13 +49,20 @@ app.get("/books", async function(req, res) {
   }
 });
 
-app.get("/books/:bookName", async function(req, res) {
+
+app.get("/books/:subject/:bookName", async function(req, res) {
   try {
     await connectDB();
-    const JavaBook = createBookModel('Python');
-    console.log(req.params.bookName);
-    const book = await JavaBook.findOne({ name: req.params.bookName });
+    const { subject, bookName } = req.params;
+    const BookModel = createBookModel(subject);
+    console.log(bookName);
+    const book = await BookModel.findOne({ name: bookName });
     console.log(book);
+
+    if (!book) {
+      return res.status(404).send("Book not found");
+    }
+
     res.render("book1", { fileData: book.file.fileData, fileType: book.file.fileType });
   } catch (err) {
     console.log(err);
@@ -55,6 +72,7 @@ app.get("/books/:bookName", async function(req, res) {
     mongoose.connection.close();
   }
 });
+
 
 app.listen(3000, '0.0.0.0', function() {
   console.log("Server started on port 3000");
